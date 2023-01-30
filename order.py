@@ -6,13 +6,15 @@ def get_choices(choices: list, choice_type: str):
     max_choices = len(choices)
     prompt = ''
     while True:
-        prompt = input(f'How many {choice_type} would you like? (up to {max_choices})')
-        if bool(re.findall(r'^[1-9]+$', prompt)):
+        prompt = input(f'How many {choice_type} would you like? (up to {max_choices}) ')
+        if bool(re.findall(r'^\d+$', prompt)):
             choice_num = int(prompt)
             break
         print('Not a valid response! Try again.')
     if choice_num > max_choices:
         choice_num = max_choices
+    elif choice_num == 0:
+        choice_num = 1
     return np.random.choice(choices, choice_num, replace=False)
 
 
