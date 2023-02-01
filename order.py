@@ -4,7 +4,6 @@ import re
 
 def get_choices(choices: list, choice_type: str):
     max_choices = len(choices)
-    prompt = ''
     while True:
         prompt = input(f'How many {choice_type} would you like? (up to {max_choices}) ')
         if bool(re.findall(r'^\d+$', prompt)):
@@ -15,14 +14,17 @@ def get_choices(choices: list, choice_type: str):
         choice_num = max_choices
     elif choice_num == 0:
         choice_num = 1
-    return np.random.choice(choices, choice_num, replace=False)
+    results = np.random.choice(choices, choice_num, replace=False)
+    while 'Red Sauce' in results and 'White Sauce' in results and len(results) < len(choices):
+        results = np.random.choice(choices, choice_num, replace=False)
+    return results
 
 
 def main():
     order = dict()
     sauces = ['BBQ', 'Garlic Rub', 'Mushroom Pesto', 'Olive Oil', 'Pesto', 'Red Sauce',
               'Spicy Calabrian Chili Red Sauce', 'White Sauce']
-    cheeses = ['Asiago', 'Dairy-Free Cheese', 'Feta', 'Gorgonzola', 'Mozzarella', 'Parmesan', 'Ricotta']
+    cheeses = ['Asiago', 'Feta', 'Gorgonzola', 'Mozzarella', 'Parmesan', 'Ricotta']  # no dairy-free cheese
     meats = ['Anchovies', 'Bacon', 'Canadian Bacon', 'Grilled Chicken', 'Ground Beef', 'Mild Sausage', 'Pepperoni',
              'Plant-Based Italian Sausage', 'Salami', 'Spicy Chicken Sausage']
     veggies = ['Artichokes', 'Arugula', 'Basil - Fresh Chopped', 'Black Olives', 'Broccoli - Roasted',
