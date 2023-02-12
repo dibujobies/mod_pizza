@@ -15,7 +15,16 @@ def get_choices(choices: list, choice_type: str):
     elif choice_num == 0:
         choice_num = 1
     results = np.random.choice(choices, choice_num, replace=False)
-    while 'Red Sauce' in results and 'White Sauce' in results and len(results) < len(choices):
+    while True:
+        fail_condition = False
+        if choice_type == 'sauces':
+            fail_condition = len(results) < max_choices and (('Red Sauce' in results and 'White Sauce' in results)
+                                                             or len([i for i in results if 'Red Sauce' in i])) > 1
+        elif choice_type == 'veggies':
+            fail_condition = len(results) < max_choices-1 and (len([i for i in results if 'Garlic' in i]) > 1
+                                                               or len([i for i in results if 'Tomatoes' in i]) > 1)
+        if not fail_condition:
+            break
         results = np.random.choice(choices, choice_num, replace=False)
     return results
 
@@ -35,7 +44,7 @@ def main():
     finishing_sauces = ['Balsamic Fig Glaze', 'BBQ Swirl', 'Hot Buffalo Sauce', 'Mike\'s Hot Honey', 'Pesto Drizzles',
                         'Ranch', 'Red Sauce Dollops', 'Sri-rancha']
     for i, j in zip([sauces, cheeses, meats, veggies, finishing_sauces], ['sauces', 'cheeses', 'meats', 'veggies', 'finishing sauces']):
-        order[j] = get_choices(i,j)
+        order[j] = get_choices(i, j)
     for i, j in order.items():
         print(f'{i}:', ', '.join(j))
 
